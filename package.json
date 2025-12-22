@@ -1,0 +1,24 @@
+{
+  "name": "playwright-vscode",
+  "version": "1.0.0",
+  "description": "Automated Software Testing with Playwright",
+  "license": "ISC",
+  "author": "vishal",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "tests:chrome": "playwright test --config=playwright.config.ts --project=Chromium",
+    "tests:firefox": "playwright test --config=playwright.config.ts --project=Firefox",
+    "tests:webkit": "playwright test --config=playwright.config.ts --project=Webkit"
+  },
+  "dependencies": {
+    "prettier": "^3.7.4"
+  },
+  "directories": {
+    "test": "tests"
+  },
+  "keywords": [],
+  "devDependencies": {
+    "@playwright/test": "^1.57.0"
+  }
+}
