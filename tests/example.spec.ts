@@ -79,16 +79,17 @@ test.describe.parallel.only('Hooks', () => {
     await page.screenshot({ path: 'screenshot.png', fullPage: true })
   })
 
-  test('Single element Screenshot', async ({ page }) => {
-    // await page.goto('https://example.com/')
-    const element = await page.$('h1')
-    await element.screenshot({ path: 'single_element_screenshot.png' })
-  })
+ test('Single element Screenshot', async ({ page }) => {
+  await page.goto('https://example.com');
+
+  const element = page.locator('h1');
+  await element.screenshot({ path: 'single_element_screenshot.png' });
 })
+
 
 test('Custom Helpers', async ({ page }) => {
   await loadHomepage(page)
  // await page.pause()
   await assertTitle(page)
 })
-
+})
