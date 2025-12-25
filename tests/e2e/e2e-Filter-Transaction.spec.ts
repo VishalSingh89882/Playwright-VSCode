@@ -1,12 +1,17 @@
 import { test, expect } from '@playwright/test'
+import { HomePage } from '../../page-object/HomePage'
+import { LoginPage } from '../../page-object/LoginPage'
 
 test.describe('Filter Transactions', () => {
+  let loginpage: LoginPage
+  let homepage:  HomePage
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://zero.webappsecurity.com/index.html')
-    await page.click('#signin_button')
-    await page.fill('#user_login', 'username')
-    await page.fill('#user_password', 'password')
-    await page.click('text=Sign in')
+    loginpage = new LoginPage(page)
+    homepage = new HomePage(page)
+
+    await homepage.visit()
+    await homepage.clickOnSignIn()
+    await loginpage.login('username','password')
   })
 
   test('Verify the results for each account', async ({ page }) => {

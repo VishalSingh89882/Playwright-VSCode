@@ -1,35 +1,33 @@
 import { test, expect } from '@playwright/test'
+import { LoginPage } from '../../page-object/LoginPage'
+import { HomePage } from '../../page-object/HomePage'
 
-test.describe('Login / Logout Flow', () => {
+test.describe.parallel.only('Login / Logout Flow', () => {
+  let loginPage: LoginPage
+  let homePage: HomePage
+
   // Before Hook
   test.beforeEach(async ({ page }) => {
-    await page.goto('http://zero.webappsecurity.com/')
+    loginPage = new LoginPage(page)
+    homePage = new HomePage(page)
+
+    await homePage.visit()
   })
 
   // Negative Scenario
   test('Negative Scenario for login', async ({ page }) => {
-    await page.click('#signin_button')
-    await page.fill('#user_login', 'invalid username')
-    await page.fill('#user_password', 'invalid password')
-    await page.click('text=Sign in')
-
-    const errorMessage = await page.locator('.alert-error')
-    await expect(errorMessage).toContainText('Login and/or password are wrong')
+    await homePage.clickOnSignIn()
+    await loginPage.login('invalid username', 'invalid password')
+    await loginPage.wait(3000)
+    await loginPage.assertErrorMessage()
   })
 
   // Positive Scenario + Logout
   test('Positive Scenario for login + logout', async ({ page }) => {
-    await page.click('#signin_button')
-    await page.fill('#user_login', 'username')
-    await page.fill('#user_password', 'password')
-    // await page.click('text=Sign in')
-    // IMPORTANT: do NOT wait for the SSL navigation
-    await page.click('text=Sign in')
-    
+    await homePage.clickOnSignIn()
+    await loginPage.login('username', 'password')
 
     await page.goto('http://zero.webappsecurity.com/bank/transfer-funds.html')
-
-    await page.waitForSelector('ul.nav-tabs')
 
     const accountSummaryTab = await page.locator('#account_summary_tab')
     await expect(accountSummaryTab).toBeVisible()
